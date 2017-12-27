@@ -10,15 +10,13 @@ import java.util.function.Function;
  * Java. This Interface has two variants -- {@link Ok} and {@link Err}.
  * Correct Values are wrapped in the {@link Ok} variant, and any checked
  * exceptions that would be thrown should be wrapped in the {@link Err}.
- * <br>
- * <br>
- * This result, instead of the value it wraps, gets passed through the
+ *
+ * <p>This result, instead of the value it wraps, gets passed through the
  * chained function calls. At the end, to get at the wrapped value, the
  * error must be handled (unless explicitly told to do otherwise through
  * the unwrap method.
- * <br>
- * <br>
- * This is heavily based of the Result type in the programming language
+ *
+ * <p>This is heavily based of the Result type in the programming language
  * rust. The function names and some parts of the comments were borrowed
  * from the documentation.
  * Created by bryan.e.barnhart on 10/26/2016.
@@ -26,130 +24,144 @@ import java.util.function.Function;
 public interface Result<T, E extends Throwable> extends Iterable<T> {
 
     /**
-     * Returns true if {@link Ok}.
+     * Returns {@code true} if this is an {@link Ok}, otherwise
+     * {@code false}.
+     *
      * @return true if {@link Ok} or false if {@link Err}
      */
     boolean isOk();
 
     /**
-     * Returns false if {@link Err}.
+     * Returns {@code true} if this is an {@link Err}, otherwise
+     * {@code false}.
+     *
      * @return true if {@link Err} or false if {@link Ok}
      */
     boolean isErr();
 
     /**
-     * Returns {@link Optional} of the wrapped {@link T} value,
-     * returning an empty {@link Optional} if this is an {@link Err}.
+     * Returns an {@link Optional} of the contained value if this is an
+     * {@link Ok}, otherwise {@link Optional#EMPTY}.
+     *
      * @return The {@link Optional} of the current {@link Result}
      */
     Optional<T> ok();
 
     /**
-     * Returns{@link Optional} of the wrapped {@link E} value,
-     * returning an empty {@link Optional} if this is an {@link Ok}
+     * Returns an {@link Optional} of the contained error if this is an
+     * {@link Err}, otherwise {@link Optional#EMPTY}.
+     *
      * @return The {@link  Optional} of the current {@link Result}
      */
     Optional<E> err();
 
     /**
-     * Maps wrapped {@link T} to new {@link Result} with wrapped
-     * {@link U} using the given function if the current type is
-     * {@link Ok}. Otherwise, return {@link Err} with current
-     * wrapped {@link E}.
-     * @param op The mapping to apply to {@link T}
-     * @param <U> The wrapped type of the returned {@link Result}
-     * @return The new {@link Result} after mapping {@link T}
+     * If this is an {@link Ok}, uses the provided mapping to map
+     * the contained value to a new value, otherwise return an
+     * {@link Err} containing the current error.
+     *
+     * @param op The mapping to apply to the contained value
+     * @param <U> The type of the contained value after mapping
+     * @return The new {@link Result} after mapping the contained value
      */
     <U> Result<U, E> map(Function<T, U> op);
 
     /**
-     * Maps wrapped {@link E} to new {@link Result} with wrapped
-     * {@link F} using the given function if the current type is
-     * {@link Err}. Otherwise, return {@link Ok} with current
-     * wrapped {@link T}.
-     * @param op The mapping to apply to {@link E}
-     * @param <F> The wrapped error of the returned {@link Result}
-     * @return The new {@link Result} after mapping {@link E}
+     * If this is an {@link Err}, uses the provided mapping to map
+     * the contained error to a new error, otherwise return an
+     * {@link Ok} containing the current value.
+     *
+     * @param op The mapping to apply to the contained error
+     * @param <F> The error type of the returned {@link Result}
+     * @return The new {@link Result} after mapping the contained error
      */
     <F extends Throwable> Result<T, F> mapErr(Function<E, F> op);
 
     /**
-     * Returns res if the calling {@link Result} is {@link Ok}. Returns
-     * wrapped {@link E} if the calling {@link Result} is {@link Err}.
-     * @param res The {@link Result} to compare the current
-     *            {@link Result}
-     * @param <U> The wrapped value of the comparing {@link Result}
-     * @return The current {@link Err} or the given {@link Result}
+     * If {@link Ok}, returns the provided {@code Result}, otherwise
+     * returns an {@link Err} containing the current error.
+     *
+     * @param res The {@code Result} to compare to this {@link Result}
+     * @param <U> The value type of the provided {@link Result}
+     * @return The current {@link Err} or the provided {@link Result}
      */
     <U> Result<U,E> and(Result<U,E> res);
 
     /**
-     * If {@link Ok} Call op on wrapped {@link T} and return the result.
-     * Otherwise return an {@link Err} of the current wrapped error.
+     * If {@link Ok}, maps the contained value to a {@code Result} and
+     * returns that result, otherwise returns an {@link Err} containing
+     * the current error.
+     *
      * @param op The function to apply to wrapped value
-     * @param <U> The wrapped type of the returned {@link Result}
-     * @return The new {@link Result} or the current {@link Err}
+     * @param <U> The value type of the returned {@link Result}
+     * @return The computed {@link Result} or the current {@link Err}
      */
     <U> Result<U,E> andThen(Function<T, Result<U,E>> op);
 
     /**
-     * Returns res if the calling {@link Result} is {@link Err}. Returns
-     * wrapped {@link T} if calling {@link Result} is {@link Ok}.
+     * If {@link Err}, returns the provided {@link Result}, otherwise
+     * returns an {@link Ok} containing the current value.
+     *
      * @param res The {@link Result} to return if {@link Err}
-     * @param <F> The {@link E} of the new {@link Result}
-     * @return The current {@link Ok} or the given {@link Result}
+     * @param <F> The error type of the provided {@link Result}
+     * @return The current {@link Ok} or the provided {@link Result}
      */
     <F extends Throwable> Result<T, F> or(Result<T, F> res);
 
     /**
-     * Returns {@link Ok} with wrapped {@link T}, or if {@link Err}
-     * applies the given function to compute the {@link F} value from
-     * the wrapped {@link E} value for the returned {@link Err}.
+     * If {@link Err}, maps the contained error to a {@code Result} and
+     * returns that {@code Result}, otherwise returns an {@link Ok}
+     * containing the current value.
+     *
      * @param op the mapping for the returned error
-     * @param <F> the returned error type
+     * @param <F> the error type of the returned {@link Result}
      * @return The {@link Ok} value or the computed {@link Err}
      */
     <F extends Throwable> Result<T, F> orElse(Function<E, Result<T, F>> op);
 
     /**
-     * If {@link Ok}, return wrapped {@link T}. Otherwise, return
+     * If {@link Ok}, returns the contained value, otherwise returns the
      * provided default value.
+     *
      * @param optb The default value
-     * @return The wrapped {@link T} if {@link Ok} else provided value
+     * @return The contained value if {@link Ok} else the default value
      */
     T unwrapOr(T optb);
 
     /**
-     * Return the wrapped {@link T} value if the current {@link Result}
-     * is {@link Ok}. Otherwise, if {@link Err} call the provided
-     * function on the error and return the output.
+     * If {@link Ok}, returns the contained value, otherwise returns the
+     * mapped value of the current error.
+     *
      * @param op The function to handle {@link Err}
      * @return The wrapped value or the computed value of the error
      */
     T unwrapOrElse(Function<E,T> op);
 
     /**
-     * Return the wrapped {@link T} value if the current {@link Result}.
+     * if {@link Ok}, returns the contained value, otherwise throws a
+     * {@link NullPointerException}.
      *
-     * if {@link Ok}. Otherwise, throw a {@link NullPointerException}.
-     * @return the wrapped value
+     * @return the contained value
+     * @throws NullPointerException if {@link Err}
      */
     T unwrap();
 
     /**
-     * Return the wrapped {@link T} value if the current {@link Result}
-     * is {@link Ok}. Otherwise, throw a {@link NullPointerException}
-     * with the provided message.
+     * if {@link Ok}, returns the contained value, otherwise throws a
+     * {@link NullPointerException} with the provided message.
+     *
      * @param msg The error message to throw if {@link Err}
-     * @return The wrapped value
+     * @return The contained value
+     * @throws NullPointerException if {@link Err}
      */
     T expect(String msg);
 
     /**
-     * Return the wrapped {@link E} value if the current {@link Result}
-     * is {@link Err}. Otherwise, throw a {@link NullPointerException}
-     * with a message from the contained {@link T}.
-     * @return The wrapped error
+     * if {@link Err}, returns the contained error, otherwise throws a
+     * {@link NullPointerException}.
+     *
+     * @return The contained error
+     * @throws NullPointerException if {@link Ok}
      */
     E unwrapErr();
 
