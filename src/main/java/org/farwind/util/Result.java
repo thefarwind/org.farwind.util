@@ -1,9 +1,9 @@
 package org.farwind.util;
 
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * A type for handling checked exceptions in a util manner in
@@ -21,7 +21,7 @@ import java.util.function.Function;
  * from the documentation.
  * Created by bryan.e.barnhart on 10/26/2016.
  */
-public abstract class Result<T, E extends Throwable> implements Iterable<T> {
+public abstract class Result<T, E extends Throwable> {
     private Result(){ /* prevent instantiation */ };
 
     /**
@@ -77,6 +77,14 @@ public abstract class Result<T, E extends Throwable> implements Iterable<T> {
      * @return The new {@link Result} after mapping the contained error
      */
     abstract <F extends Throwable> Result<T, F> mapErr(Function<E, F> op);
+
+    /**
+     * If {@link Ok}, returns a stream containing the value, otherwise
+     * return an empty {@link Stream}.
+     *
+     * @return The Stream containing the contained value.
+     */
+    abstract Stream<T> stream();
 
     /**
      * If {@link Ok}, returns the provided {@code Result}, otherwise
@@ -204,24 +212,8 @@ public abstract class Result<T, E extends Throwable> implements Iterable<T> {
         }
 
         @Override
-        public Iterator<T> iterator() {
-            return new Iterator<T>() {
-                private boolean next = true;
-                @Override
-                public boolean hasNext() {
-                    return this.next;
-                }
-
-                @Override
-                public T next() {
-                    if(this.next) {
-                        this.next = false;
-                        return t;
-                    } else {
-                        throw new NoSuchElementException("No value present");
-                    }
-                }
-            };
+        public Stream<T> stream() {
+            return Stream.of(t);
         }
 
         @Override
@@ -313,18 +305,8 @@ public abstract class Result<T, E extends Throwable> implements Iterable<T> {
         }
 
         @Override
-        public Iterator<T> iterator(){
-            return new Iterator<T>(){
-                @Override
-                public boolean hasNext() {
-                    return false;
-                }
-
-                @Override
-                public T next(){
-                    throw new NoSuchElementException("No value present");
-                }
-            };
+        public Stream<T> stream() {
+            return Stream.empty();
         }
 
         @Override

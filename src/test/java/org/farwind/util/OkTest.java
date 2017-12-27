@@ -1,8 +1,9 @@
 package org.farwind.util;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -71,20 +72,11 @@ public class OkTest {
     }
 
     @Test
-    public void iterator() throws Exception {
+    public void stream() throws Exception {
         Result<String, TestException1> res = new Ok<>("this is okay");
-        Iterator<String> iter = res.iterator();
-        assertTrue(iter.hasNext());
-        assertEquals("this is okay", iter.next());
-        assertFalse(iter.hasNext());
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void iterator_throw() throws Exception {
-        Result<String, TestException1> res = new Ok<>("this is okay");
-        Iterator<String> iter = res.iterator();
-        assertEquals("this is okay", iter.next());
-        iter.next();
+        List<String> items = res.stream().collect(Collectors.toList());
+        assertEquals(1, items.size());
+        assertEquals("this is okay", items.get(0));
     }
 
     @Test

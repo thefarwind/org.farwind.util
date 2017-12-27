@@ -8,9 +8,10 @@ import static org.junit.Assert.*;
 import org.farwind.util.Result.Ok;
 import org.farwind.util.Result.Err;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Test class for the {@link Err} {@link Result} variant.
@@ -70,18 +71,10 @@ public class ErrTest {
     }
 
     @Test
-    public void iterator() throws Exception {
+    public void stream() throws Exception {
         Result<String, TestException1> res = new Err<>(new TestException1());
-        Iterator<String> iter = res.iterator();
-        assertFalse(iter.hasNext());
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void iterator_throw() throws Exception {
-        Result<String, TestException1> res = new Err<>(new TestException1());
-        Iterator<String> iter = res.iterator();
-        assertFalse(iter.hasNext());
-        iter.next();
+        List<String> items = res.stream().collect(Collectors.toList());
+        assertEquals(0, items.size());
     }
 
     @Test
