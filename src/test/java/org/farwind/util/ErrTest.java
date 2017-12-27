@@ -123,12 +123,12 @@ public class ErrTest {
                 new Err<>(new TestException1()).unwrapOrElse(Object::getClass));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = NoSuchElementException.class)
     public void unwrap() throws Exception {
         new Err<>(new TestException1()).unwrap();
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = NoSuchElementException.class)
     public void expect() throws Exception {
         try {
             new Err<>(new TestException1()).expect("this is the message");

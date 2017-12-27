@@ -140,29 +140,29 @@ public abstract class Result<T, E extends Throwable> implements Iterable<T> {
 
     /**
      * if {@link Ok}, returns the contained value, otherwise throws a
-     * {@link NullPointerException}.
+     * {@link NoSuchElementException}.
      *
      * @return the contained value
-     * @throws NullPointerException if {@link Err}
+     * @throws NoSuchElementException if {@link Err}
      */
     abstract T unwrap();
 
     /**
      * if {@link Ok}, returns the contained value, otherwise throws a
-     * {@link NullPointerException} with the provided message.
+     * {@link NoSuchElementException} with the provided message.
      *
      * @param msg The error message to throw if {@link Err}
      * @return The contained value
-     * @throws NullPointerException if {@link Err}
+     * @throws NoSuchElementException if {@link Err}
      */
     abstract T expect(String msg);
 
     /**
      * if {@link Err}, returns the contained error, otherwise throws a
-     * {@link NullPointerException}.
+     * {@link NoSuchElementException}.
      *
      * @return The contained error
-     * @throws NullPointerException if {@link Ok}
+     * @throws NoSuchElementException if {@link Ok}
      */
     abstract E unwrapErr();
 
@@ -218,7 +218,7 @@ public abstract class Result<T, E extends Throwable> implements Iterable<T> {
                         this.next = false;
                         return t;
                     } else {
-                        throw new NoSuchElementException();
+                        throw new NoSuchElementException("No value present");
                     }
                 }
             };
@@ -266,7 +266,7 @@ public abstract class Result<T, E extends Throwable> implements Iterable<T> {
 
         @Override
         public E unwrapErr() {
-            throw new NullPointerException(t.toString());
+            throw new NoSuchElementException(t.toString());
         }
 
         @Override
@@ -322,7 +322,7 @@ public abstract class Result<T, E extends Throwable> implements Iterable<T> {
 
                 @Override
                 public T next(){
-                    throw new NoSuchElementException();
+                    throw new NoSuchElementException("No value present");
                 }
             };
         }
@@ -359,12 +359,12 @@ public abstract class Result<T, E extends Throwable> implements Iterable<T> {
 
         @Override
         public T unwrap() {
-            throw new NullPointerException();
+            throw new NoSuchElementException("No value present");
         }
 
         @Override
         public T expect(String msg) {
-            throw new NullPointerException(msg);
+            throw new NoSuchElementException(msg);
         }
 
         @Override

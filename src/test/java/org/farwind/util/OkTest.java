@@ -148,7 +148,7 @@ public class OkTest {
         assertEquals("this is okay", res.expect("this should never happen"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = NoSuchElementException.class)
     public void unwrapErr() throws Exception {
         Result<String, TestException1> res = new Ok<>("this is okay");
         assertEquals(null, res.unwrapErr());
