@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 /**
  * A type for handling checked exceptions in a util manner in
- * Java. This Interface has two variants -- {@link Ok} and {@link Err}.
+ * Java. This sealed class has two variants -- {@link Ok} and {@link Err}.
  * Correct Values are wrapped in the {@link Ok} variant, and any checked
  * exceptions that would be thrown should be wrapped in the {@link Err}.
  *
@@ -21,7 +21,8 @@ import java.util.function.Function;
  * from the documentation.
  * Created by bryan.e.barnhart on 10/26/2016.
  */
-public interface Result<T, E extends Throwable> extends Iterable<T> {
+public abstract class Result<T, E extends Throwable> implements Iterable<T> {
+    private Result(){ /* prevent instantiation */ };
 
     /**
      * Returns {@code true} if this is an {@link Ok}, otherwise
@@ -29,7 +30,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      *
      * @return true if {@link Ok} or false if {@link Err}
      */
-    boolean isOk();
+    abstract boolean isOk();
 
     /**
      * Returns {@code true} if this is an {@link Err}, otherwise
@@ -37,7 +38,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      *
      * @return true if {@link Err} or false if {@link Ok}
      */
-    boolean isErr();
+    abstract boolean isErr();
 
     /**
      * Returns an {@link Optional} of the contained value if this is an
@@ -45,7 +46,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      *
      * @return The {@link Optional} of the current {@link Result}
      */
-    Optional<T> ok();
+    abstract Optional<T> ok();
 
     /**
      * Returns an {@link Optional} of the contained error if this is an
@@ -53,7 +54,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      *
      * @return The {@link  Optional} of the current {@link Result}
      */
-    Optional<E> err();
+    abstract Optional<E> err();
 
     /**
      * If this is an {@link Ok}, uses the provided mapping to map
@@ -64,7 +65,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @param <U> The type of the contained value after mapping
      * @return The new {@link Result} after mapping the contained value
      */
-    <U> Result<U, E> map(Function<T, U> op);
+    abstract <U> Result<U, E> map(Function<T, U> op);
 
     /**
      * If this is an {@link Err}, uses the provided mapping to map
@@ -75,7 +76,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @param <F> The error type of the returned {@link Result}
      * @return The new {@link Result} after mapping the contained error
      */
-    <F extends Throwable> Result<T, F> mapErr(Function<E, F> op);
+    abstract <F extends Throwable> Result<T, F> mapErr(Function<E, F> op);
 
     /**
      * If {@link Ok}, returns the provided {@code Result}, otherwise
@@ -85,7 +86,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @param <U> The value type of the provided {@link Result}
      * @return The current {@link Err} or the provided {@link Result}
      */
-    <U> Result<U,E> and(Result<U,E> res);
+    abstract <U> Result<U,E> and(Result<U,E> res);
 
     /**
      * If {@link Ok}, maps the contained value to a {@code Result} and
@@ -96,7 +97,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @param <U> The value type of the returned {@link Result}
      * @return The computed {@link Result} or the current {@link Err}
      */
-    <U> Result<U,E> andThen(Function<T, Result<U,E>> op);
+    abstract <U> Result<U,E> andThen(Function<T, Result<U,E>> op);
 
     /**
      * If {@link Err}, returns the provided {@link Result}, otherwise
@@ -106,7 +107,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @param <F> The error type of the provided {@link Result}
      * @return The current {@link Ok} or the provided {@link Result}
      */
-    <F extends Throwable> Result<T, F> or(Result<T, F> res);
+    abstract <F extends Throwable> Result<T, F> or(Result<T, F> res);
 
     /**
      * If {@link Err}, maps the contained error to a {@code Result} and
@@ -117,7 +118,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @param <F> the error type of the returned {@link Result}
      * @return The {@link Ok} value or the computed {@link Err}
      */
-    <F extends Throwable> Result<T, F> orElse(Function<E, Result<T, F>> op);
+    abstract <F extends Throwable> Result<T, F> orElse(Function<E, Result<T, F>> op);
 
     /**
      * If {@link Ok}, returns the contained value, otherwise returns the
@@ -126,7 +127,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @param optb The default value
      * @return The contained value if {@link Ok} else the default value
      */
-    T unwrapOr(T optb);
+    abstract T unwrapOr(T optb);
 
     /**
      * If {@link Ok}, returns the contained value, otherwise returns the
@@ -135,7 +136,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @param op The function to handle {@link Err}
      * @return The wrapped value or the computed value of the error
      */
-    T unwrapOrElse(Function<E,T> op);
+    abstract T unwrapOrElse(Function<E,T> op);
 
     /**
      * if {@link Ok}, returns the contained value, otherwise throws a
@@ -144,7 +145,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @return the contained value
      * @throws NullPointerException if {@link Err}
      */
-    T unwrap();
+    abstract T unwrap();
 
     /**
      * if {@link Ok}, returns the contained value, otherwise throws a
@@ -154,7 +155,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @return The contained value
      * @throws NullPointerException if {@link Err}
      */
-    T expect(String msg);
+    abstract T expect(String msg);
 
     /**
      * if {@link Err}, returns the contained error, otherwise throws a
@@ -163,9 +164,9 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
      * @return The contained error
      * @throws NullPointerException if {@link Ok}
      */
-    E unwrapErr();
+    abstract E unwrapErr();
 
-    final class Ok<T, E extends Throwable> implements Result<T, E> {
+    final static class Ok<T, E extends Throwable> extends Result<T, E> {
         private final T t;
 
         public Ok(T t) {
@@ -274,7 +275,7 @@ public interface Result<T, E extends Throwable> extends Iterable<T> {
         }
     }
 
-    final class Err<T, E extends Throwable> implements Result<T, E> {
+    final static class Err<T, E extends Throwable> extends Result<T, E> {
         private final E e;
 
         public Err(E e){
