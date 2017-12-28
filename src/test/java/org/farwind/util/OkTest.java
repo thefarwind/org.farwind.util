@@ -129,6 +129,12 @@ public class OkTest {
     }
 
     @Test
+    public void unwrapOrThrow() throws Exception {
+        Result<String, TestException1> res = new Ok<>("this is okay");
+        assertEquals("this is okay", res.unwrapOrThrow());
+    }
+
+    @Test
     public void unwrap() throws Exception {
         Result<String, TestException1> res = new Ok<>("this is okay");
         assertEquals("this is okay", res.unwrap());

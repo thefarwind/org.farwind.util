@@ -116,6 +116,11 @@ public class ErrTest {
                 new Err<>(new TestException1()).unwrapOrElse(Object::getClass));
     }
 
+    @Test(expected = TestException1.class)
+    public void unwrapOrThrow() throws Exception {
+        new Err<>(new TestException1()).unwrapOrThrow();
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void unwrap() throws Exception {
         new Err<>(new TestException1()).unwrap();
