@@ -30,7 +30,7 @@ public abstract class Result<T, E extends Throwable> {
      *
      * @return true if {@link Ok} or false if {@link Err}
      */
-    abstract boolean isOk();
+    public abstract boolean isOk();
 
     /**
      * Returns {@code true} if this is an {@link Err}, otherwise
@@ -38,7 +38,7 @@ public abstract class Result<T, E extends Throwable> {
      *
      * @return true if {@link Err} or false if {@link Ok}
      */
-    abstract boolean isErr();
+    public abstract boolean isErr();
 
     /**
      * Returns an {@link Optional} of the contained value if this is an
@@ -46,7 +46,7 @@ public abstract class Result<T, E extends Throwable> {
      *
      * @return The {@link Optional} of the current {@link Result}
      */
-    abstract Optional<T> ok();
+    public abstract Optional<T> ok();
 
     /**
      * Returns an {@link Optional} of the contained error if this is an
@@ -54,7 +54,7 @@ public abstract class Result<T, E extends Throwable> {
      *
      * @return The {@link  Optional} of the current {@link Result}
      */
-    abstract Optional<E> err();
+    public abstract Optional<E> err();
 
     /**
      * If this is an {@link Ok}, uses the provided mapping to map
@@ -65,7 +65,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param <U> The type of the contained value after mapping
      * @return The new {@link Result} after mapping the contained value
      */
-    abstract <U> Result<U, E> map(Function<T, U> op);
+    public abstract <U> Result<U, E> map(Function<T, U> op);
 
     /**
      * If this is an {@link Err}, uses the provided mapping to map
@@ -76,7 +76,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param <F> The error type of the returned {@link Result}
      * @return The new {@link Result} after mapping the contained error
      */
-    abstract <F extends Throwable> Result<T, F> mapErr(Function<E, F> op);
+    public abstract <F extends Throwable> Result<T, F> mapErr(Function<E, F> op);
 
     /**
      * If {@link Ok}, returns a stream containing the value, otherwise
@@ -84,7 +84,7 @@ public abstract class Result<T, E extends Throwable> {
      *
      * @return The Stream containing the contained value.
      */
-    abstract Stream<T> stream();
+    public abstract Stream<T> stream();
 
     /**
      * If {@link Ok}, returns the provided {@code Result}, otherwise
@@ -94,7 +94,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param <U> The value type of the provided {@link Result}
      * @return The current {@link Err} or the provided {@link Result}
      */
-    abstract <U> Result<U,E> and(Result<U,E> res);
+    public abstract <U> Result<U,E> and(Result<U,E> res);
 
     /**
      * If {@link Ok}, maps the contained value to a {@code Result} and
@@ -105,7 +105,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param <U> The value type of the returned {@link Result}
      * @return The computed {@link Result} or the current {@link Err}
      */
-    abstract <U> Result<U,E> andThen(Function<T, Result<U,E>> op);
+    public abstract <U> Result<U,E> andThen(Function<T, Result<U,E>> op);
 
     /**
      * If {@link Err}, returns the provided {@link Result}, otherwise
@@ -115,7 +115,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param <F> The error type of the provided {@link Result}
      * @return The current {@link Ok} or the provided {@link Result}
      */
-    abstract <F extends Throwable> Result<T, F> or(Result<T, F> res);
+    public abstract <F extends Throwable> Result<T, F> or(Result<T, F> res);
 
     /**
      * If {@link Err}, maps the contained error to a {@code Result} and
@@ -126,7 +126,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param <F> the error type of the returned {@link Result}
      * @return The {@link Ok} value or the computed {@link Err}
      */
-    abstract <F extends Throwable> Result<T, F> orElse(Function<E, Result<T, F>> op);
+    public abstract <F extends Throwable> Result<T, F> orElse(Function<E, Result<T, F>> op);
 
     /**
      * If {@link Ok}, returns the contained value, otherwise returns the
@@ -135,7 +135,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param optb The default value
      * @return The contained value if {@link Ok} else the default value
      */
-    abstract T unwrapOr(T optb);
+    public abstract T unwrapOr(T optb);
 
     /**
      * If {@link Ok}, returns the contained value, otherwise returns the
@@ -144,7 +144,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param op The function to handle {@link Err}
      * @return The wrapped value or the computed value of the error
      */
-    abstract T unwrapOrElse(Function<E,T> op);
+    public abstract T unwrapOrElse(Function<E,T> op);
 
     /**
      * If {@link Ok}, returns the contained value, otherwise throws the
@@ -164,7 +164,7 @@ public abstract class Result<T, E extends Throwable> {
      * @return the contained value
      * @throws NoSuchElementException if {@link Err}
      */
-    abstract T unwrap();
+    public abstract T unwrap();
 
     /**
      * if {@link Ok}, returns the contained value, otherwise throws a
@@ -174,7 +174,7 @@ public abstract class Result<T, E extends Throwable> {
      * @return The contained value
      * @throws NoSuchElementException if {@link Err}
      */
-    abstract T expect(String msg);
+    public abstract T expect(String msg);
 
     /**
      * if {@link Err}, returns the contained error, otherwise throws a
@@ -183,9 +183,9 @@ public abstract class Result<T, E extends Throwable> {
      * @return The contained error
      * @throws NoSuchElementException if {@link Ok}
      */
-    abstract E unwrapErr();
+    public abstract E unwrapErr();
 
-    final static class Ok<T, E extends Throwable> extends Result<T, E> {
+    public final static class Ok<T, E extends Throwable> extends Result<T, E> {
         private final T t;
 
         public Ok(T t) {
@@ -283,7 +283,7 @@ public abstract class Result<T, E extends Throwable> {
         }
     }
 
-    final static class Err<T, E extends Throwable> extends Result<T, E> {
+    public final static class Err<T, E extends Throwable> extends Result<T, E> {
         private final E e;
 
         public Err(E e){
