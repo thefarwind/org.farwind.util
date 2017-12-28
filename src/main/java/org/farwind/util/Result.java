@@ -147,6 +147,17 @@ public abstract class Result<T, E extends Throwable> {
     abstract T unwrapOrElse(Function<E,T> op);
 
     /**
+     * If {@link Ok}, returns the contained value, otherwise throws the
+     * current error. This method provides a transition from the stream
+     * and functional exception pattern back to the imperative exception
+     * handling pattern.
+     *
+     * @return The contained value if {@link Ok}
+     * @throws <E> The contained error if {@link Err}.
+     */
+    abstract T unwrapOrThrow() throws E;
+
+    /**
      * if {@link Ok}, returns the contained value, otherwise throws a
      * {@link NoSuchElementException}.
      *
@@ -247,6 +258,11 @@ public abstract class Result<T, E extends Throwable> {
         }
 
         @Override
+        public T unwrapOrThrow() throws E {
+            return t;
+        }
+
+        @Override
         public T unwrap() {
             return t;
         }
@@ -337,6 +353,11 @@ public abstract class Result<T, E extends Throwable> {
         @Override
         public T unwrapOrElse(Function<E,T> op) {
             return op.apply(e);
+        }
+
+        @Override
+        public T unwrapOrThrow() throws E {
+            throw e;
         }
 
         @Override
