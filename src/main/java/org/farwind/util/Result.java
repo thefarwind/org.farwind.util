@@ -153,7 +153,7 @@ public abstract class Result<T, E extends Throwable> {
      * handling pattern.
      *
      * @return The contained value if {@link Ok}
-     * @throws <E> The contained error if {@link Err}.
+     * @throws E The contained error if {@link Err}.
      */
     abstract T unwrapOrThrow() throws E;
 
