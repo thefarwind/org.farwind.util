@@ -188,8 +188,12 @@ public abstract class Result<T, E extends Throwable> {
     public final static class Ok<T, E extends Throwable> extends Result<T, E> {
         private final T t;
 
-        public Ok(T t) {
+        private Ok(T t) {
             this.t = t;
+        }
+
+        public static <T, E extends Throwable> Result<T, E> of(T t) {
+            return new Ok<>(t);
         }
 
         @Override
@@ -286,8 +290,12 @@ public abstract class Result<T, E extends Throwable> {
     public final static class Err<T, E extends Throwable> extends Result<T, E> {
         private final E e;
 
-        public Err(E e){
+        private Err(E e){
             this.e = e;
+        }
+
+        public static <T, E extends Throwable> Result<T, E> of(E e) {
+            return new Err<>(e);
         }
 
         @Override

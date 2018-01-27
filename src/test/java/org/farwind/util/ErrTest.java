@@ -32,68 +32,68 @@ public class ErrTest {
 
     @Test
     public void isOk() throws Exception {
-        Result<Integer, TestException1> res = new Err<>(new TestException1());
+        Result<Integer, TestException1> res = Err.of(new TestException1());
         assertFalse(res.isOk());
     }
 
     @Test
     public void isErr() throws Exception {
-        Result<Integer, TestException1> res = new Err<>(new TestException1());
+        Result<Integer, TestException1> res = Err.of(new TestException1());
         assertTrue(res.isErr());
     }
 
     @Test
     public void ok() throws Exception {
-        Result<Integer, TestException1> res = new Err<>(new TestException1());
+        Result<Integer, TestException1> res = Err.of(new TestException1());
         assertEquals(Optional.empty(), res.ok());
     }
 
     @Test
     public void err() throws Exception {
         TestException1 e = new TestException1();
-        Result<Integer, TestException1> res = new Err<>(e);
+        Result<Integer, TestException1> res = Err.of(e);
         assertEquals(Optional.of(e), res.err());
     }
 
     @Test
     public void map() throws Exception {
         TestException1 e = new TestException1();
-        Result<Integer, TestException1> res = new Err<>(e);
-        assertEquals(new Err<>(e), res.map(Object::toString));
+        Result<Integer, TestException1> res = Err.of(e);
+        assertEquals(Err.of(e), res.map(Object::toString));
     }
 
     @Test
     public void mapErr() throws Exception {
         TestException1 e1 = new TestException1();
         TestException2 e2 = new TestException2();
-        Result<Integer, TestException1> res = new Err<>(e1);
-        assertEquals(new Err<>(e2), res.mapErr(e->e2));
+        Result<Integer, TestException1> res = Err.of(e1);
+        assertEquals(Err.of(e2), res.mapErr(e->e2));
     }
 
     @Test
     public void stream() throws Exception {
-        Result<String, TestException1> res = new Err<>(new TestException1());
+        Result<String, TestException1> res = Err.of(new TestException1());
         List<String> items = res.stream().collect(Collectors.toList());
         assertEquals(0, items.size());
     }
 
     @Test
     public void and() throws Exception {
-        Result<String, TestException1> res = new Err<>(new TestException1());
-        assertEquals(res, res.and(new Ok<>(5)));
-        assertEquals(res, res.and(new Err<>(new TestException1())));
+        Result<String, TestException1> res = Err.of(new TestException1());
+        assertEquals(res, res.and(Ok.of(5)));
+        assertEquals(res, res.and(Err.of(new TestException1())));
     }
 
     @Test
     public void andThen() throws Exception {
-        Result<String, TestException1> res = new Err<>(new TestException1());
-        assertEquals(res, res.andThen(str->new Ok<>(str.length())));
+        Result<String, TestException1> res = Err.of(new TestException1());
+        assertEquals(res, res.andThen(str->Ok.of(str.length())));
     }
 
     @Test
     public void or() throws Exception {
-        Result<String, TestException1> res = new Err<>(new TestException1());
-        Result<String, TestException2> res2 = new Err<>(new TestException2());
+        Result<String, TestException1> res = Err.of(new TestException1());
+        Result<String, TestException2> res2 = Err.of(new TestException2());
         assertEquals(res2, res.or(res2));
     }
 
@@ -101,35 +101,35 @@ public class ErrTest {
     public void orElse() throws Exception {
         TestException1 e1 = new TestException1();
         TestException2 e2 = new TestException2();
-        Result<String, TestException1> res1 = new Err<>(e1);
-        assertEquals(new Err<>(e2), res1.orElse(e->new Err<>(e2)));
+        Result<String, TestException1> res1 = Err.of(e1);
+        assertEquals(Err.of(e2), res1.orElse(e->Err.of(e2)));
     }
 
     @Test
     public void unwrapOr() throws Exception {
-        assertEquals(5, new Err<>(new TestException1()).unwrapOr(5));
+        assertEquals(5, Err.of(new TestException1()).unwrapOr(5));
     }
 
     @Test
     public void unwrapOrElse() throws Exception {
         assertEquals(TestException1.class,
-                new Err<>(new TestException1()).unwrapOrElse(Object::getClass));
+                Err.of(new TestException1()).unwrapOrElse(Object::getClass));
     }
 
     @Test(expected = TestException1.class)
     public void unwrapOrThrow() throws Exception {
-        new Err<>(new TestException1()).unwrapOrThrow();
+        Err.of(new TestException1()).unwrapOrThrow();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void unwrap() throws Exception {
-        new Err<>(new TestException1()).unwrap();
+        Err.of(new TestException1()).unwrap();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void expect() throws Exception {
         try {
-            new Err<>(new TestException1()).expect("this is the message");
+            Err.of(new TestException1()).expect("this is the message");
         } catch (Exception e){
             assertEquals(e.getMessage(), "this is the message");
             throw e;
@@ -140,7 +140,7 @@ public class ErrTest {
     @Test
     public void unwrapErr() throws Exception {
         TestException1 e = new TestException1();
-        assertEquals(e, new Err<>(e).unwrapErr());
+        assertEquals(e, Err.of(e).unwrapErr());
     }
 
     @Test
@@ -148,24 +148,24 @@ public class ErrTest {
         TestException1 e1 = new TestException1();
         TestException2 e2 = new TestException2();
 
-        Result<String, TestException1> res = new Err<>(e1);
-        Result<String, TestException2> res2 = new Err<>(e2);
+        Result<String, TestException1> res = Err.of(e1);
+        Result<String, TestException2> res2 = Err.of(e2);
         assertNotEquals(res, res2);
 
-        Result<String, TestException1> res3 = new Err<>(e1);
-        Result<String, TestException1> res4 = new Err<>(e1);
+        Result<String, TestException1> res3 = Err.of(e1);
+        Result<String, TestException1> res4 = Err.of(e1);
         assertEquals(res3, res4);
 
-        Result<String, TestException1> res5 = new Err<>(e1);
-        Result<Integer, TestException1> res6 = new Err<>(e1);
+        Result<String, TestException1> res5 = Err.of(e1);
+        Result<Integer, TestException1> res6 = Err.of(e1);
         assertEquals(res5, res6);
 
-        Result<String, TestException2> res7 = new Err<>(new TestException2());
-        Result<String, TestException1> res8 = new Ok<>("this is okay");
+        Result<String, TestException2> res7 = Err.of(new TestException2());
+        Result<String, TestException1> res8 = Ok.of("this is okay");
         assertNotEquals(res7, res8);
 
-        Result<String, TestException1> res9 = new Err<>(new TestException1());
-        Result<String, TestException1> res10 = new Ok<>("this is okay");
+        Result<String, TestException1> res9 = Err.of(new TestException1());
+        Result<String, TestException1> res10 = Ok.of("this is okay");
         assertNotEquals(res9, res10);
     }
 }
