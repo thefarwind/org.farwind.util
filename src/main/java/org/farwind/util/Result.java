@@ -218,12 +218,12 @@ public abstract class Result<T, E extends Throwable> {
 
         @Override
         public <U> Result<U, E> map(Function<T, U> op) {
-            return new Ok<>(op.apply(t));
+            return Ok.of(op.apply(t));
         }
 
         @Override
         public <F extends Throwable> Result<T, F> mapErr(Function<E, F> op) {
-            return new Ok<>(t);
+            return Ok.of(t);
         }
 
         @Override
@@ -243,12 +243,12 @@ public abstract class Result<T, E extends Throwable> {
 
         @Override
         public <F extends Throwable> Result<T, F> or(Result<T, F> res) {
-            return new Ok<>(t);
+            return Ok.of(t);
         }
 
         @Override
         public <F extends Throwable> Result<T, F> orElse(Function<E, Result<T, F>> op) {
-            return new Ok<>(t);
+            return Ok.of(t);
         }
 
         @Override
@@ -320,12 +320,12 @@ public abstract class Result<T, E extends Throwable> {
 
         @Override
         public <U> Result<U, E> map(Function<T, U> op) {
-            return new Err<>(e);
+            return Err.of(e);
         }
 
         @Override
         public <F extends Throwable> Result<T, F> mapErr(Function<E, F> op) {
-            return new Err<>(op.apply(e));
+            return Err.of(op.apply(e));
         }
 
         @Override
@@ -335,12 +335,12 @@ public abstract class Result<T, E extends Throwable> {
 
         @Override
         public <U> Result<U,E> and(Result<U,E> res) {
-            return new Err<>(e);
+            return Err.of(e);
         }
 
         @Override
         public <U> Result<U,E> andThen(Function<T, Result<U,E>> op) {
-            return new Err<>(e);
+            return Err.of(e);
         }
 
         @Override
