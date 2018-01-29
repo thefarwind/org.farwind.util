@@ -197,6 +197,14 @@ public abstract class Result<T, E extends Throwable> {
             this.t = t;
         }
 
+        /**
+         * Returns an instance of {@code Ok} wrapping the given value.
+         *
+         * @param t The value to be wrapped by {@code Ok}.
+         * @param <T> The value type of the returned {@link Result}
+         * @param <E> The error type of the returned {@link Result}
+         * @return The wrapped value
+         */
         public static <T, E extends Throwable> Result<T, E> of(T t) {
             return new Ok<>(t);
         }
@@ -302,6 +310,15 @@ public abstract class Result<T, E extends Throwable> {
             this.e = e;
         }
 
+        /**
+         * Returns an instance of {@code Err} wrapping the given
+         * exception.
+         *
+         * @param e The error to be wrapped by {@code Err}.
+         * @param <T> The value type of the returned {@link Result}
+         * @param <E> The error type of the returned {@link Result}
+         * @return The wrapped exception
+         */
         public static <T, E extends Throwable> Result<T, E> of(E e) {
             return new Err<>(e);
         }
