@@ -19,7 +19,9 @@ import java.util.stream.Stream;
  * <p>This is heavily based of the Result type in the programming language
  * rust. The function names and some parts of the comments were borrowed
  * from the documentation.
- * Created by bryan.e.barnhart on 10/26/2016.
+ *
+ * <p>This class is not serializable, due to backwards compatability
+ * issues which will occur when value types are added to the language.
  */
 public abstract class Result<T, E extends Throwable> {
     private Result(){ /* prevent instantiation */ };
@@ -158,7 +160,7 @@ public abstract class Result<T, E extends Throwable> {
     abstract T unwrapOrThrow() throws E;
 
     /**
-     * if {@link Ok}, returns the contained value, otherwise throws a
+     * If {@link Ok}, returns the contained value, otherwise throws a
      * {@link NoSuchElementException}.
      *
      * @return the contained value
@@ -167,7 +169,7 @@ public abstract class Result<T, E extends Throwable> {
     public abstract T unwrap();
 
     /**
-     * if {@link Ok}, returns the contained value, otherwise throws a
+     * If {@link Ok}, returns the contained value, otherwise throws a
      * {@link NoSuchElementException} with the provided message.
      *
      * @param msg The error message to throw if {@link Err}
@@ -177,7 +179,7 @@ public abstract class Result<T, E extends Throwable> {
     public abstract T expect(String msg);
 
     /**
-     * if {@link Err}, returns the contained error, otherwise throws a
+     * If {@link Err}, returns the contained error, otherwise throws a
      * {@link NoSuchElementException}.
      *
      * @return The contained error
