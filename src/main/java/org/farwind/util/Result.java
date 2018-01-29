@@ -187,6 +187,9 @@ public abstract class Result<T, E extends Throwable> {
      */
     public abstract E unwrapErr();
 
+    /**
+     * The variant of {@link Result} wrapping an expected value.
+     */
     public final static class Ok<T, E extends Throwable> extends Result<T, E> {
         private final T t;
 
@@ -289,6 +292,9 @@ public abstract class Result<T, E extends Throwable> {
         }
     }
 
+    /**
+     * The variant of {@link Result} wrapping an exception.
+     */
     public final static class Err<T, E extends Throwable> extends Result<T, E> {
         private final E e;
 
