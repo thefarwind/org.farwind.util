@@ -19,7 +19,9 @@ import java.util.stream.Stream;
  * <p>This is heavily based of the Result type in the programming language
  * rust. The function names and some parts of the comments were borrowed
  * from the documentation.
- * Created by bryan.e.barnhart on 10/26/2016.
+ *
+ * <p>This class is not serializable, due to backwards compatability
+ * issues which will occur when value types are added to the language.
  */
 public abstract class Result<T, E extends Throwable> {
     private Result(){ /* prevent instantiation */ };
@@ -158,7 +160,7 @@ public abstract class Result<T, E extends Throwable> {
     abstract T unwrapOrThrow() throws E;
 
     /**
-     * if {@link Ok}, returns the contained value, otherwise throws a
+     * If {@link Ok}, returns the contained value, otherwise throws a
      * {@link NoSuchElementException}.
      *
      * @return the contained value
@@ -167,7 +169,7 @@ public abstract class Result<T, E extends Throwable> {
     public abstract T unwrap();
 
     /**
-     * if {@link Ok}, returns the contained value, otherwise throws a
+     * If {@link Ok}, returns the contained value, otherwise throws a
      * {@link NoSuchElementException} with the provided message.
      *
      * @param msg The error message to throw if {@link Err}
@@ -177,7 +179,7 @@ public abstract class Result<T, E extends Throwable> {
     public abstract T expect(String msg);
 
     /**
-     * if {@link Err}, returns the contained error, otherwise throws a
+     * If {@link Err}, returns the contained error, otherwise throws a
      * {@link NoSuchElementException}.
      *
      * @return The contained error
@@ -185,6 +187,9 @@ public abstract class Result<T, E extends Throwable> {
      */
     public abstract E unwrapErr();
 
+    /**
+     * The variant of {@link Result} wrapping an expected value.
+     */
     public final static class Ok<T, E extends Throwable> extends Result<T, E> {
         private final T t;
 
@@ -192,6 +197,14 @@ public abstract class Result<T, E extends Throwable> {
             this.t = t;
         }
 
+        /**
+         * Returns an instance of {@code Ok} wrapping the given value.
+         *
+         * @param t The value to be wrapped by {@code Ok}.
+         * @param <T> The value type of the returned {@link Result}
+         * @param <E> The error type of the returned {@link Result}
+         * @return The wrapped value
+         */
         public static <T, E extends Throwable> Result<T, E> of(T t) {
             return new Ok<>(t);
         }
@@ -287,6 +300,9 @@ public abstract class Result<T, E extends Throwable> {
         }
     }
 
+    /**
+     * The variant of {@link Result} wrapping an exception.
+     */
     public final static class Err<T, E extends Throwable> extends Result<T, E> {
         private final E e;
 
@@ -294,6 +310,15 @@ public abstract class Result<T, E extends Throwable> {
             this.e = e;
         }
 
+        /**
+         * Returns an instance of {@code Err} wrapping the given
+         * exception.
+         *
+         * @param e The error to be wrapped by {@code Err}.
+         * @param <T> The value type of the returned {@link Result}
+         * @param <E> The error type of the returned {@link Result}
+         * @return The wrapped exception
+         */
         public static <T, E extends Throwable> Result<T, E> of(E e) {
             return new Err<>(e);
         }
