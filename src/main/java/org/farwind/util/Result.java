@@ -1,6 +1,7 @@
 package org.farwind.util;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -298,6 +299,11 @@ public abstract class Result<T, E extends Throwable> {
         public boolean equals(Object other) {
             return other instanceof Ok && ((Ok<?, ?>) other).t.equals(t);
         }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(t);
+        }
     }
 
     /**
@@ -411,6 +417,11 @@ public abstract class Result<T, E extends Throwable> {
         @Override
         public boolean equals(Object other) {
             return other instanceof Err && ((Err<?, ?>) other).e.equals(e);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(e);
         }
     }
 }
