@@ -418,5 +418,10 @@ public abstract class Result<T, E extends Throwable> {
         public boolean equals(Object other) {
             return other instanceof Err && ((Err<?, ?>) other).e.equals(e);
         }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(e);
+        }
     }
 }
