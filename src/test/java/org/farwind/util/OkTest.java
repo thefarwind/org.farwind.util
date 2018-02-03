@@ -2,6 +2,7 @@ package org.farwind.util;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -173,5 +174,11 @@ public class OkTest {
         Result<String, TestException1> res9 = Ok.of("this is okay");
         Result<String, TestException1> res10 = Err.of(new TestException1());
         assertNotEquals(res9, res10);
+    }
+
+    @Test
+    public void hash() throws Exception {
+        Result<String, TestException1> res = Ok.of("this is okay");
+        assertEquals(Objects.hash("this is okay"), res.hashCode());
     }
 }
