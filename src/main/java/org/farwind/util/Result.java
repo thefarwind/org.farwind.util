@@ -96,7 +96,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param <U> The value type of the provided {@link Result}
      * @return The current {@link Err} or the provided {@link Result}
      */
-    public abstract <U> Result<U,E> and(Result<U,E> res);
+    public abstract <U> Result<U, E> and(Result<U, E> res);
 
     /**
      * If {@link Ok}, maps the contained value to a {@code Result} and
@@ -107,7 +107,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param <U> The value type of the returned {@link Result}
      * @return The computed {@link Result} or the current {@link Err}
      */
-    public abstract <U> Result<U,E> andThen(Function<T, Result<U,E>> op);
+    public abstract <U> Result<U, E> andThen(Function<T, Result<U, E>> op);
 
     /**
      * If {@link Err}, returns the provided {@link Result}, otherwise
@@ -146,7 +146,7 @@ public abstract class Result<T, E extends Throwable> {
      * @param op The function to handle {@link Err}
      * @return The wrapped value or the computed value of the error
      */
-    public abstract T unwrapOrElse(Function<E,T> op);
+    public abstract T unwrapOrElse(Function<E, T> op);
 
     /**
      * If {@link Ok}, returns the contained value, otherwise throws the
@@ -245,12 +245,12 @@ public abstract class Result<T, E extends Throwable> {
         }
 
         @Override
-        public <U> Result<U,E> and(Result<U,E> res) {
+        public <U> Result<U, E> and(Result<U, E> res) {
             return res;
         }
 
         @Override
-        public <U> Result<U,E> andThen(Function<T, Result<U,E>> op) {
+        public <U> Result<U, E> andThen(Function<T, Result<U, E>> op) {
             return op.apply(t);
         }
 
@@ -270,7 +270,7 @@ public abstract class Result<T, E extends Throwable> {
         }
 
         @Override
-        public T unwrapOrElse(Function<E,T> op) {
+        public T unwrapOrElse(Function<E, T> op) {
             return t;
         }
 
@@ -296,7 +296,7 @@ public abstract class Result<T, E extends Throwable> {
 
         @Override
         public boolean equals(Object other) {
-            return other instanceof Ok && ((Ok)other).t.equals(t);
+            return other instanceof Ok && ((Ok<?, ?>) other).t.equals(t);
         }
     }
 
@@ -306,7 +306,7 @@ public abstract class Result<T, E extends Throwable> {
     public final static class Err<T, E extends Throwable> extends Result<T, E> {
         private final E e;
 
-        private Err(E e){
+        private Err(E e) {
             this.e = e;
         }
 
@@ -359,12 +359,12 @@ public abstract class Result<T, E extends Throwable> {
         }
 
         @Override
-        public <U> Result<U,E> and(Result<U,E> res) {
+        public <U> Result<U, E> and(Result<U, E> res) {
             return Err.of(e);
         }
 
         @Override
-        public <U> Result<U,E> andThen(Function<T, Result<U,E>> op) {
+        public <U> Result<U, E> andThen(Function<T, Result<U, E>> op) {
             return Err.of(e);
         }
 
@@ -384,7 +384,7 @@ public abstract class Result<T, E extends Throwable> {
         }
 
         @Override
-        public T unwrapOrElse(Function<E,T> op) {
+        public T unwrapOrElse(Function<E, T> op) {
             return op.apply(e);
         }
 
@@ -410,7 +410,7 @@ public abstract class Result<T, E extends Throwable> {
 
         @Override
         public boolean equals(Object other) {
-            return other instanceof Err && ((Err)other).e.equals(e);
+            return other instanceof Err && ((Err<?, ?>) other).e.equals(e);
         }
     }
 }
