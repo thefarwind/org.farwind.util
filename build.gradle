@@ -1,5 +1,8 @@
 apply plugin: 'java'
 
+group = 'org.farwind'
+version = '0.1.0'
+
 repositories {
     mavenCentral()
     jcenter()
