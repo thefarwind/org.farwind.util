@@ -6,9 +6,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.farwind.util.Result.Ok;
 import org.farwind.util.Result.Err;
@@ -147,10 +147,10 @@ public class OkTest {
         assertEquals("this is okay", res.expect("this should never happen"));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void unwrapErr() throws Exception {
         Result<String, TestException1> res = Ok.of("this is okay");
-        assertEquals(null, res.unwrapErr());
+        assertThrows(NoSuchElementException.class, res::unwrapErr);
     }
 
     @Test
