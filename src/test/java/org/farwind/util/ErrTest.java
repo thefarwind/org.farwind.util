@@ -1,9 +1,8 @@
 package org.farwind.util;
 
-import org.junit.Test;
-import org.junit.runner.*;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.farwind.util.Result.Ok;
 import org.farwind.util.Result.Err;
@@ -117,25 +116,22 @@ public class ErrTest {
                 Err.of(new TestException1()).unwrapOrElse(Object::getClass));
     }
 
-    @Test(expected = TestException1.class)
+    @Test
     public void unwrapOrThrow() throws Exception {
-        Err.of(new TestException1()).unwrapOrThrow();
+        assertThrows(TestException1.class, Err.of(new TestException1())::unwrapOrThrow);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void unwrap() throws Exception {
-        Err.of(new TestException1()).unwrap();
+        assertThrows(NoSuchElementException.class, Err.of(new TestException1())::unwrap);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void expect() throws Exception {
-        try {
-            Err.of(new TestException1()).expect("this is the message");
-        } catch (Exception e){
-            assertEquals(e.getMessage(), "this is the message");
-            throw e;
-        }
-        fail();
+        Exception e = assertThrows(
+            NoSuchElementException.class,
+            () -> Err.of(new TestException1()).expect("this is the message"));
+        assertEquals("this is the message", e.getMessage());
     }
 
     @Test
